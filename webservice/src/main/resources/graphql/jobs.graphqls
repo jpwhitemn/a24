@@ -1,0 +1,100 @@
+scalar DateTime
+
+ enum JobState {
+    Submitted
+    Running
+    Paused
+    Complete
+    Failed
+  }
+  
+  enum Command {
+  	Start
+  	Stop
+  }
+
+  type JobDefinition {
+    name: String
+    id: ID!
+    requiredParameters: [String]
+    creator: String
+    active: Boolean
+  }
+
+  type Schedule {
+    name: String
+    id: ID!
+    creator: String
+    active: Boolean
+    cron: String
+  }
+
+  interface Job {
+    definition: JobDefinition
+    id: ID!
+    parameters: [String]
+    jobState: JobState
+    submitter: String
+    lastUpdated: DateTime
+  }
+
+  type ScheduledJob implements Job {
+    definition: JobDefinition
+    id: ID!
+    parameters: [String]
+    jobState: JobState
+    submitter: String
+    lastUpdated: DateTime
+    schedule: Schedule
+  }
+
+  type UnscheduledJob implements Job {
+    definition: JobDefinition
+    id: ID!
+    parameters: [String]
+    jobState: JobState
+    submitter: String
+    lastUpdated: DateTime
+    startTime: DateTime
+  }
+
+  type Query {
+  	jobDefinitions: [JobDefinition]
+  	jobDefinitionById(id: ID!): JobDefinition
+  	jobDefinitionByName(name: String): JobDefinition
+  	
+    schedules: [Schedule]
+    scheduleByName(name: String): Schedule
+    scheduleById(id: ID!): Schedule
+    
+    scheduledJobs: [ScheduledJob]
+    scheduledJobsByState(jobState: JobState): [ScheduledJob]
+    scheduledJobById(id: ID!): ScheduledJob
+    scheduledJobCommandRequestById(id: ID!, command: Command!): ScheduledJob
+    
+    unscheduledJobs: [UnscheduledJob]
+    unscheduledJobsByState(jobState: JobState): [UnscheduledJob]
+    unscheduledJobById(id: ID!): UnscheduledJob
+    unscheduledJobCommandRequestById(id: ID!, command: Command!): UnscheduledJob
+  }
+  
+  type Mutation {
+  	createSchedule(name: String, creator: String, active: Boolean, cron: String): Schedule
+  	deleteSchedule(id: ID!): Boolean!
+  	updateSchedule(id: ID!, name: String, creator: String, active: Boolean, cron: String): Schedule 
+
+  	createJobDefinition(name: String, requiredParameters: [String], creator: String, active: Boolean): JobDefinition
+  	deleteJobDefinition(id: ID!): Boolean!
+  	updateJobDefinition(id: ID!, name: String, requiredParameters: [String], creator: String, active: Boolean): JobDefinition 
+  	
+  	createScheduledJob(jobDefinitionName: String, parameters: [String], jobState: JobState, submitter: String, scheduleName: String): ScheduledJob
+  	deleteScheduledJob(id: ID!): Boolean!
+  	updateScheduledJob(id: ID!, jobDefinitionName: String, parameters: [String], jobState: JobState, submitter: String, scheduleName: String): ScheduledJob
+  	
+  	createUnscheduledJob(jobDefinitionName: String, parameters: [String], jobState: JobState, submitter: String): UnscheduledJob
+  	deleteUnscheduledJob(id: ID!): Boolean!
+  	updateUnscheduledJob(id: ID!, jobDefinitionName: String, parameters: [String], jobState: JobState, submitter: String): UnscheduledJob
+
+  }
+
+

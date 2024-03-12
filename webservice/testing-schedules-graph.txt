@@ -1,0 +1,67 @@
+query Schedules {
+  schedules {
+    id
+    name
+    creator
+    cron
+    active
+  }
+}
+
+query ScheduleByName($scheduleName: String!) {
+  scheduleByName(name: $scheduleName) {
+    id
+    name
+    creator
+    cron
+    active
+  }
+}
+
+query ScheduleByID($scheduleId: ID!) {
+  scheduleById(id: $scheduleId) {
+    id
+    name
+    creator
+    cron
+    active
+  }
+}
+
+mutation CreateSchedule($scheduleName: String, $person: String, $cron: String) {
+  createSchedule(name: $scheduleName, creator: $person, active: true, cron: $cron) {
+    id
+    name
+    creator
+    cron
+    active
+  }
+}
+
+mutation DeleteSchedule($scheduleId: ID!) {
+  deleteSchedule(id: $scheduleId)
+}
+
+mutation UpdateSchedule($scheduleId: ID!, $scheduleName: String, $person: String, $cron: String) {
+  updateSchedule(
+    id: $scheduleId
+    name: $scheduleName
+    creator: $person
+    active: false
+    cron: $cron
+  ) {
+    id
+    name
+    creator
+    cron
+    active
+  }
+}
+
+-------Variables
+{
+  "scheduleId": "95d822b5-65d3-4c7d-8f4e-edee123043e3",
+  "scheduleName": "everyNight",
+  "person": "Terry",
+  "cron": "0 0 21 31 DEC ? *"
+}

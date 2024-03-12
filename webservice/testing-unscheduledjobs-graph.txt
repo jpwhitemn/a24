@@ -1,0 +1,115 @@
+query Jobs {
+  unscheduledJobs {
+    id
+    submitter
+    jobState
+    parameters
+    startTime
+    definition {
+      id
+      name
+    }
+  }
+}
+
+query JobsByID($scheduleJobId: ID!) {
+  unscheduledJobById(id: $scheduleJobId) {
+    id
+    submitter
+    jobState
+    parameters
+    startTime
+    definition {
+      id
+      name
+    }
+  }
+}
+
+query JobsByState {
+  unscheduledJobsByState(jobState: Running) {
+    id
+    submitter
+    jobState
+    parameters
+    startTime
+    definition {
+      id
+      name
+    }
+  }
+}
+
+mutation CreateUnscheduledJob($jobDefName: String, $params: [String], $person: String) {
+  createUnscheduledJob(
+    jobDefinitionName: $jobDefName
+    parameters: $params
+    jobState: Failed
+    submitter: $person
+  ) {
+    id
+  }
+}
+
+mutation DeleteUnscheduledJob($scheduleJobId: ID!) {
+  deleteUnscheduledJob(id: $scheduleJobId)
+}
+
+mutation UpdateUnscheduledJob($scheduleJobId: ID!, $jobDefName: String, $params: [String], $person: String) {
+  updateUnscheduledJob(
+    id: $scheduleJobId
+    jobDefinitionName: $jobDefName
+    parameters: $params
+    jobState: Failed
+    submitter: $person
+  ) {
+    id
+    submitter
+    jobState
+    parameters
+    startTime
+    definition {
+      id
+      name
+    }
+  }
+}
+
+query StartJob($scheduleJobId: ID!) {
+  unscheduledJobCommandRequestById(id: $scheduleJobId, command: Start) {
+    id
+    submitter
+    jobState
+    parameters
+    startTime
+    definition {
+      id
+      name
+    }
+  }
+}
+
+query StopJob($scheduleJobId: ID!) {
+  unscheduledJobCommandRequestById(id: $scheduleJobId, command: Stop) {
+    id
+    submitter
+    jobState
+    parameters
+    startTime
+    definition {
+      id
+      name
+    }
+  }
+}
+
+------Variables
+{
+  "scheduleJobId": "d994ff87-a26f-415a-8ff4-792e5ada47a7",
+  "jobDefName": "SendRefundPayments",
+  "person": "Terry",
+  "params": [
+    "param1",
+    "param2"
+  ]
+}

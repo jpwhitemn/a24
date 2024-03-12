@@ -1,0 +1,74 @@
+query JobDefs {
+  jobDefinitions {
+    id
+    name
+    requiredParameters
+    creator
+    active
+  }
+}
+
+query JobByID($jobDefId: ID!) {
+  jobDefinitionById(id: $jobDefId) {
+    id
+    name
+    requiredParameters
+    creator
+    active
+  }
+}
+
+query JobByName($jobDefName: String!) {
+  jobDefinitionByName(name: $jobDefName) {
+    id
+    name
+    requiredParameters
+    creator
+    active
+  }
+}
+
+mutation CreateJobDefinition ($jobDefName: String, $params: [String], $person: String) {
+  createJobDefinition(
+    name: $jobDefName
+    requiredParameters: $params
+    creator: $person
+    active: true
+  ) {
+    id
+    name
+    requiredParameters
+    creator
+    active
+  }
+}
+
+mutation DeleteJobDefinition ($jobDefId: ID!) {
+  deleteJobDefinition(id: $jobDefId) 
+}
+
+mutation UpdateJobDefinition ($jobDefId: ID!, $jobDefName: String, $params: [String], $person: String){
+  updateJobDefinition(
+    id: $jobDefId
+    name: $jobDefName
+    requiredParameters: $params
+    creator: $person
+    active: false
+  ) {
+    id
+    name
+    requiredParameters
+    creator
+    active
+  }
+}
+
+
+---------
+Variables
+{
+  "jobDefId": "a85db2ae-1d89-4d7e-b4c4-ddafdb3d3195",
+  "jobDefName": "BeneficiaryChangeLetterJob",
+  "params": ["param1", "param2"],
+  "person": "Terry"
+}

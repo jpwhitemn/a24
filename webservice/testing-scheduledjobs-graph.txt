@@ -1,0 +1,136 @@
+query Jobs {
+  scheduledJobs {
+    id
+    submitter
+    jobState
+    parameters
+    definition {
+      id
+      name
+    }
+    schedule {
+      id
+      name
+    }
+  }
+}
+
+query JobsByID($scheduleJobId: ID!) {
+  scheduledJobById(id: $scheduleJobId) {
+    id
+    submitter
+    jobState
+    parameters
+    definition {
+      id
+      name
+    }
+    schedule {
+      id
+      name
+    }
+  }
+}
+
+query JobsByState {
+  scheduledJobsByState(jobState: Running) {
+    id
+    submitter
+    jobState
+    parameters
+    definition {
+      id
+      name
+    }
+    schedule {
+      id
+      name
+    }
+  }
+}
+
+mutation CreateScheduledJob($jobDefName: String, $params: [String], $person: String, $scheduleName: String) {
+  createScheduledJob(
+    jobDefinitionName: $jobDefName
+    parameters: $params
+    jobState: Failed
+    submitter: $person
+    scheduleName: $scheduleName
+  ) {
+    id
+  }
+}
+
+mutation DeleteScheduledJob($scheduleJobId: ID!) {
+  deleteScheduledJob(id: $scheduleJobId)
+}
+
+mutation UpdateScheduledJob($scheduleJobId: ID!, $jobDefName: String, $params: [String], $person: String, $scheduleName: String) {
+  updateScheduledJob(
+    id: $scheduleJobId
+    jobDefinitionName: $jobDefName
+    parameters: $params
+    jobState: Failed
+    submitter: $person
+    scheduleName: $scheduleName
+  ) {
+    id
+    submitter
+    jobState
+    parameters
+    definition {
+      id
+      name
+    }
+    schedule {
+      id
+      name
+    }
+  }
+}
+
+query StartJob($scheduleJobId: ID!) {
+  scheduledJobCommandRequestById(id: $scheduleJobId, command: Start) {
+    id
+    submitter
+    jobState
+    parameters
+    definition {
+      id
+      name
+    }
+    schedule {
+      id
+      name
+    }
+  }
+}
+
+query StopJob($scheduleJobId: ID!) {
+  scheduledJobCommandRequestById(id: $scheduleJobId, command: Stop) {
+    id
+    submitter
+    jobState
+    parameters
+    definition {
+      id
+      name
+    }
+    schedule {
+      id
+      name
+    }
+  }
+}
+
+-------Variables
+{
+  "scheduleJobId": "2d3e541b-47f4-4c5f-a7a9-291b773acb5d",
+  "jobDefName": "BeneficiaryChangeLetterJob",
+  "scheduleName": "everyNight",
+  "person": "Terry",
+  "params": [
+    "param1",
+    "param2"
+  ]
+}
