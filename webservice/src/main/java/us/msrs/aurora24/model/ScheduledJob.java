@@ -4,14 +4,22 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 
-public record ScheduledJob(
+public class ScheduledJob extends Job {
 
-		JobDefinition definition,
-		UUID id,
-		List<String> parameters,
-		JobState jobState,
-		String submitter,
-		OffsetDateTime lastUpdated,
-		Schedule schedule) 
-		implements Job {
+	private Schedule schedule;
+
+	public Schedule getSchedule() {
+		return schedule;
+	}
+
+	public void setSchedule(Schedule schedule) {
+		this.schedule = schedule;
+	}
+
+	public ScheduledJob(JobDefinition definition, UUID id, List<String> parameters, JobState jobState, String submitter,
+			OffsetDateTime lastUpdated, Schedule schedule) {
+		super(definition, id, parameters, jobState, submitter, lastUpdated);
+		this.schedule = schedule;
+	}
+
 }

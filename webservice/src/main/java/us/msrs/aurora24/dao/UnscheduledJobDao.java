@@ -44,14 +44,14 @@ public class UnscheduledJobDao {
 
 	public UnscheduledJob getById(String id) {
 		return getJobs().stream()
-				.filter(job -> job.id().equals(UUID.fromString(id)))
+				.filter(job -> job.getId().equals(UUID.fromString(id)))
 				.findFirst()
 				.orElse(null);
 	}
 
 	public List<UnscheduledJob> getByState(JobState jobState) {
 		return getJobs().stream()
-				.filter(job -> job.jobState().equals(jobState)).toList();
+				.filter(job -> job.getJobState().equals(jobState)).toList();
 	}
 
 	public UnscheduledJob createUnscheduledJob(JobDefinition jobDefinition, List<String> parameters, JobState jobState,
@@ -88,4 +88,5 @@ public class UnscheduledJobDao {
 		}
 		throw new NotFoundByID("UnscheduledJob not found with id: " + id);
 	}
+	
 }

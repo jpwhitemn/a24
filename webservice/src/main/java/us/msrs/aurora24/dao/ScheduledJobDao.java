@@ -44,14 +44,14 @@ public class ScheduledJobDao {
 
 	public ScheduledJob getById(String id) {
 		return getJobs().stream()
-				.filter(job -> job.id().equals(UUID.fromString(id)))
+				.filter(job -> job.getId().equals(UUID.fromString(id)))
 				.findFirst()
 				.orElse(null);
 	}
 
 	public List<ScheduledJob> getByState(JobState jobState) {
 		return getJobs().stream()
-				.filter(job -> job.jobState().equals(jobState)).toList();
+				.filter(job -> job.getJobState().equals(jobState)).toList();
 	}
 
 	public ScheduledJob createScheduledJob(JobDefinition jobDefinition, List<String> parameters, JobState jobState,

@@ -8,6 +8,7 @@ import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
 
+import us.msrs.aurora24.MQTTCommandPublisher;
 import us.msrs.aurora24.dao.JobDefinitionDao;
 import us.msrs.aurora24.dao.UnscheduledJobDao;
 import us.msrs.aurora24.exception.NotFoundByID;
@@ -24,6 +25,9 @@ public class UnscheduledJobController {
 
 	@Autowired
 	JobDefinitionDao jobDefinitionDao;
+	
+	@Autowired
+	MQTTCommandPublisher publisher;
 
 	@QueryMapping
 	public List<UnscheduledJob> unscheduledJobs() {
@@ -46,7 +50,17 @@ public class UnscheduledJobController {
 		// #TODO what would change in the state and timestamps of the job? JobState = Submitted on start?  lastupdate changed?
 		if (job == null)
 			throw new NotFoundByID("No job with id: " + id);
-		System.out.println("Requesting " + command + " of job: "+ job.id());
+		
+		boolean pub_success = publisher.publishMessgae(id, command);
+		System.out.println(String.format("Queuing job %s to %s", id, command));
+		if (!pub_success) {
+			System.out.println("Queue of job failed");
+			// #TODO reset job to not started, etc.
+			// #TODO log
+			return null;
+		} 
+		System.out.println("Queued successfully");
+		// #TODO log publishing
 		return job;
 	}
 	
